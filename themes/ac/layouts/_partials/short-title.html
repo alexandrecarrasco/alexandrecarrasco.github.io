@@ -1,0 +1,4 @@
+{{- /* A post's title without the series name: its "linkTitle" when it has one, else its title.
+       "Securing AI Agents, Layer by Layer - Part 3: Delegation" (title) -> "Delegation" (linkTitle).
+       Usage: partial "short-title.html" . */ -}}
+{{- return .LinkTitle -}}

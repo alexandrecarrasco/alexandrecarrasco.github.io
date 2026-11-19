@@ -1,0 +1,11 @@
+{{- /* Returns an SVG file's markup. Looks under assets/ first, then static/.
+       Usage: partial "svg-file.html" "/images/posts/x.svg" */ -}}
+{{- $path := strings.TrimPrefix "/" . }}
+{{- $svg := "" }}
+{{- with resources.Get $path }}
+  {{- $svg = .Content }}
+{{- else }}
+  {{- $file := printf "static/%s" $path }}
+  {{- if fileExists $file }}{{ $svg = readFile $file }}{{ else }}{{ errorf "diagram: %q not found under assets/ or static/" $path }}{{ end }}
+{{- end }}
+{{- return ($svg | safeHTML) -}}

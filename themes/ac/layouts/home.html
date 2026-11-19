@@ -1,0 +1,119 @@
+{{ define "main" }}
+{{- $hero := site.Params.hero }}
+<section class="wrap hero">
+  {{- /* The data page: the personal-details page of an identity document, with the machine-readable lines at its foot. */}}
+  <div class="idcard">
+    <p class="idcard__issuer">Identity and access notes</p>
+    <div class="idcard__body">
+      {{- with $hero.image }}
+      <img class="idcard__photo" src="{{ . | relURL }}" alt="{{ $hero.imageAlt }}" width="180" height="216">
+      {{- end }}
+      <dl class="idcard__fields">
+        <div class="idcard__field idcard__field--name">
+          <dt>Name</dt>
+          <dd><h1>{{ site.Params.author }}</h1></dd>
+        </div>
+        {{- range $hero.fields }}
+        <div class="idcard__field">
+          <dt>{{ .label }}</dt>
+          <dd>{{ .value }}</dd>
+        </div>
+        {{- end }}
+      </dl>
+    </div>
+    {{- with $hero.mrz }}
+    <p class="idcard__mrz" aria-hidden="true">
+      {{- range $i, $line := . }}
+        {{- $l := replace (upper $line) " " "<" }}
+        {{- $pad := sub 44 (len $l) }}
+        {{- if gt $pad 0 }}{{ $l = printf "%s%s" $l (strings.Repeat $pad "<") }}{{ end }}
+        {{- if $i }}<br>{{ end }}{{ substr $l 0 44 }}
+      {{- end -}}
+    </p>
+    {{- end }}
+  </div>
+
+  <div class="hero__text">
+    <p class="hero__subtitle">{{ $hero.subtitle }}</p>
+    <p class="hero__content">{{ $hero.content }}</p>
+    <div class="button-row">
+      {{- $featured := "" }}
+      {{- with site.Params.featuredSeries }}{{ $featured = partial "series-page.html" . }}{{ end }}
+      {{- with $featured }}
+      <a class="button button--primary" href="{{ .RelPermalink }}">Read the series</a>
+      {{- else }}
+      <a class="button button--primary" href="{{ "posts/" | relURL }}">Read the posts</a>
+      {{- end }}
+      {{- with site.GetPage "/about" }}
+      <a class="button" href="{{ .RelPermalink }}">About me</a>
+      {{- end }}
+    </div>
+    <p class="link-row">
+      {{- range site.Params.social }}
+      <a href="{{ .url }}" rel="me">{{ .name }}</a>
+      {{- end }}
+      <a href="{{ "index.xml" | relURL }}">RSS</a>
+    </p>
+  </div>
+</section>
+
+{{- $posts := where site.RegularPages "Section" "posts" }}
+{{- with $posts }}
+<section class="wrap section" aria-labelledby="latest-h">
+  <div class="section__head">
+    <h2 id="latest-h">Latest posts</h2>
+    <a class="more-link" href="{{ "posts/" | relURL }}">All posts</a>
+  </div>
+  <ul class="entries">
+    {{- /* Newest first; posts published at the same time go by weight, highest (latest part) first. */}}
+    {{- range $post := first 3 (sort (sort . "Weight" "desc") "Date" "desc") }}
+    <li class="entry">
+      <a class="entry__title" href="{{ .RelPermalink }}">{{ partial "short-title.html" . }}</a>
+      {{- with .Params.series }}
+        {{- $name := . }}{{ $page := $post }}{{ $n := 0 }}
+        {{- range $i, $p := partial "series.html" $name }}{{ if eq $p.RelPermalink $page.RelPermalink }}{{ $n = add $i 1 }}{{ end }}{{ end }}
+      <p class="entry__series">Part {{ $n }} of {{ with partial "series-page.html" $name }}<a href="{{ .RelPermalink }}">{{ $name }}</a>{{ else }}{{ $name }}{{ end }}</p>
+      {{- end }}
+      <p class="entry__summary">{{ .Summary | plainify }}</p>
+      <p class="meta">{{ partial "post-meta.html" . }}</p>
+    </li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
+
+{{- with site.Taxonomies.series }}
+{{- if ge (len .) 2 }}
+<section class="wrap section" aria-labelledby="series-h">
+  <div class="section__head">
+    <h2 id="series-h">Series</h2>
+  </div>
+  <ul class="entries">
+    {{- range .ByCount }}
+    {{- with .Page }}
+    <li class="entry">
+      <a class="entry__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{- with .Description }}<p class="entry__summary">{{ . }}</p>{{ end }}
+      <p class="meta">{{ len .Pages }} parts</p>
+    </li>
+    {{- end }}
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
+{{- end }}
+
+{{- with site.Taxonomies.tags }}
+<section class="wrap section" aria-labelledby="topics-h">
+  <div class="section__head">
+    <h2 id="topics-h">Topics</h2>
+    <a class="more-link" href="{{ "tags/" | relURL }}">All tags</a>
+  </div>
+  <ul class="topic-list">
+    {{- range first 10 .ByCount }}
+    <li><a href="{{ .Page.RelPermalink }}">{{ .Name }}</a></li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
+{{ end }}

@@ -1,0 +1,9 @@
+{{- /* Home / Section / ... trail. Usage: partial "breadcrumbs.html" . */ -}}
+<nav class="crumbs" aria-label="Breadcrumb">
+  <ol>
+    {{- range .Ancestors.Reverse }}
+    <li><a href="{{ .RelPermalink }}">{{ if .IsHome }}Home{{ else if eq .Section "posts" }}Posts{{ else }}{{ .LinkTitle }}{{ end }}</a></li>
+    {{- end }}
+    <li aria-current="page">{{ if eq .Kind "section" }}Posts{{ else if and (eq .Kind "term") (eq .Data.Plural "series") }}{{ .Title }}{{ else if eq .Kind "term" }}#{{ .Data.Term }}{{ else }}{{ partial "short-title.html" . }}{{ end }}</li>
+  </ol>
+</nav>

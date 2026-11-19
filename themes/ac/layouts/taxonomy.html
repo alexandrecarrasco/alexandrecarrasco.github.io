@@ -1,0 +1,18 @@
+{{ define "main" }}
+<div class="wrap page-head">
+  {{ partial "breadcrumbs.html" . }}
+  <h1 class="h1">Tags</h1>
+  {{- if .Data.Terms }}
+  <p class="muted">Pick a tag to see its posts.</p>
+  {{- else }}
+  <p class="muted">No tags yet.</p>
+  {{- end }}
+</div>
+<div class="wrap">
+  <ul class="topic-list topic-list--large">
+    {{- range .Data.Terms.ByCount }}
+    <li><a href="{{ .Page.RelPermalink }}">{{ .Name }}</a> <span class="meta">{{ .Count }}</span></li>
+    {{- end }}
+  </ul>
+</div>
+{{ end }}

@@ -1,0 +1,14 @@
+{{- /* Search index for the Posts page: one entry per post. */ -}}
+{{- $items := slice }}
+{{- range where site.RegularPages "Section" "posts" }}
+  {{- $tags := slice }}{{ range .GetTerms "tags" }}{{ $tags = $tags | append .Data.Term }}{{ end }}
+  {{- $items = $items | append (dict
+      "title" (partial "list-title.html" .)
+      "url" .RelPermalink
+      "summary" (.Summary | plainify)
+      "tags" $tags
+      "minutes" .ReadingTime
+      "text" (.Plain | truncate 20000 "")
+  ) }}
+{{- end }}
+{{- $items | jsonify -}}

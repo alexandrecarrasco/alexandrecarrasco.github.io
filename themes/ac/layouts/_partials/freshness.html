@@ -1,0 +1,11 @@
+{{- /* When the facts were last checked, and when the post last changed, if it did.
+       Set "lastChecked" (and optionally "updates") in a post's front matter. Usage: partial "freshness.html" . */ -}}
+{{- $parts := slice }}
+{{- with .Params.lastChecked }}{{ $parts = $parts | append (printf "Facts last checked %s" (time.Format site.Params.dateFormat .)) }}{{ end }}
+{{- with .Params.updates }}
+  {{- $last := index (sort . "date" "desc") 0 }}
+  {{- $parts = $parts | append (printf "updated %s" (time.Format site.Params.dateFormat $last.date)) }}
+{{- end }}
+{{- with $parts }}
+<p class="meta freshness">{{ delimit . ", " }}.{{ with $.Params.updates }} <a href="#updates-h">What changed</a>{{ end }}</p>
+{{- end -}}

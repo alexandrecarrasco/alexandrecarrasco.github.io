@@ -1,0 +1,14 @@
+{{- /* Inlines an SVG diagram so it follows the site's light and dark themes (see "Diagrams" in main.css).
+       Params: src (e.g. /images/posts/x.svg, looked up under assets/ then static/), mobile (optional narrow
+       version shown on phones), caption. */ -}}
+{{- $src := .Get "src" -}}
+{{- $mobile := .Get "mobile" -}}
+<figure class="diagram{{ with $mobile }} has-mobile{{ end }}">
+  <div class="diagram-scroll">{{ partial "svg-file.html" $src }}</div>
+  {{- with $mobile }}
+  <div class="diagram-mobile">{{ partial "svg-file.html" . }}</div>
+  {{- end }}
+  {{- with .Get "caption" }}
+  <figcaption>{{ . }}</figcaption>
+  {{- end }}
+</figure>

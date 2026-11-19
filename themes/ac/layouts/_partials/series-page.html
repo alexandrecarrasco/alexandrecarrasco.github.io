@@ -1,0 +1,2 @@
+{{- /* The series page for a series name, or nil. Usage: partial "series-page.html" "Series name" */ -}}
+{{- return site.GetPage (printf "/series/%s" (urlize .)) -}}

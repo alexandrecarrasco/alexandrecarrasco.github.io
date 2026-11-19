@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 890" role="img" color="#1e293b" aria-label="The whole flow, with tokens bound to a key. Before any request: 0, the agent is on record in the agent registry, with an owner and the status active, and the agent generates a key pair; the private key never leaves it. Getting a bound token: 1, Alice asks the agent to pay an invoice; 2, the agent asks the authorization server for a token and adds a DPoP proof signed with its private key, carrying its public key; 3, the authorization server checks its own record of the agent and binds the token to the agent&#x27;s key; 4, it returns the token, with the key&#x27;s thumbprint in the cnf claim. Every call: 5, the agent sends tools/call with the token and a fresh proof to the gateway, the PEP, which checks the proof: the key matches the token, and the method, URL, token hash, time and unique identifier are right; 6, the gateway asks the PDP to evaluate the call; 7, the PDP answers decision true; 8, the gateway forwards the call to the MCP server; 9, the MCP server checks the audience and runs the tool; 10, the result goes back to the agent through the gateway; 11, the agent tells Alice the invoice is paid. A stolen token: an attacker who copied the token sends it to the gateway without a valid proof from the agent&#x27;s key; the gateway refuses it with 401. The PDP is not asked and the MCP server is not reached.">
+  <rect class="dg-card" x="1" y="1" width="358" height="888" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+  <g font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12.5" fill="currentColor">
+    <text x="16" y="30" font-size="14" font-weight="600">The whole flow, with bound tokens</text>
+    <!-- phases -->
+    <rect class="dg-note" x="10" y="44" width="340" height="110" rx="8" fill="#f1f5f9" stroke="none"/>
+    <rect class="dg-note" x="10" y="160" width="340" height="194" rx="8" fill="#f1f5f9" stroke="none"/>
+    <rect class="dg-note" x="10" y="360" width="340" height="362" rx="8" fill="#f1f5f9" stroke="none"/>
+    <rect class="dg-note" x="10" y="728" width="340" height="152" rx="8" fill="#f1f5f9" stroke="none"/>
+    <g class="dg-muted" font-size="11" font-weight="600" fill="#64748b">
+      <text x="20" y="62">Before any request</text>
+      <text x="20" y="178">Getting a bound token</text>
+      <text x="20" y="378">Every call</text>
+      <text x="20" y="746">A stolen token</text>
+    </g>
+    <!-- step markers: blue for what this post adds -->
+    <g text-anchor="middle" font-size="11.5" font-weight="600">
+      <circle class="dg-num" cx="34" cy="88" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="92">0</text>
+      <circle class="dg-focus" cx="34" cy="130" r="12" fill="#eff6ff" stroke="#1d4ed8"/><text x="34" y="134">K</text>
+      <circle class="dg-num" cx="34" cy="204" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="208">1</text>
+      <circle class="dg-focus" cx="34" cy="246" r="12" fill="#eff6ff" stroke="#1d4ed8"/><text x="34" y="250">2</text>
+      <circle class="dg-focus" cx="34" cy="288" r="12" fill="#eff6ff" stroke="#1d4ed8"/><text x="34" y="292">3</text>
+      <circle class="dg-focus" cx="34" cy="330" r="12" fill="#eff6ff" stroke="#1d4ed8"/><text x="34" y="334">4</text>
+      <circle class="dg-focus" cx="34" cy="404" r="12" fill="#eff6ff" stroke="#1d4ed8"/><text x="34" y="408">5</text>
+      <circle class="dg-focus" cx="34" cy="446" r="12" fill="#eff6ff" stroke="#1d4ed8"/><text x="34" y="450">✓</text>
+      <circle class="dg-num" cx="34" cy="488" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="492">6</text>
+      <circle class="dg-num" cx="34" cy="530" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="534">7</text>
+      <circle class="dg-num" cx="34" cy="572" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="576">8</text>
+      <circle class="dg-num" cx="34" cy="614" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="618">9</text>
+      <circle class="dg-num" cx="34" cy="656" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="660" font-size="10.5">10</text>
+      <circle class="dg-num" cx="34" cy="698" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="702" font-size="10.5">11</text>
+      <circle class="dg-num" cx="34" cy="772" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="776">!</text>
+      <circle class="dg-focus" cx="34" cy="814" r="12" fill="#eff6ff" stroke="#1d4ed8"/><text x="34" y="818">×</text>
+      <circle class="dg-num" cx="34" cy="856" r="12" fill="#ffffff" stroke="#64748b"/><text x="34" y="860">–</text>
+    </g>
+    <!-- steps: who, then what -->
+    <g>
+      <text x="56" y="84" font-weight="600">Agent registry</text>
+      <text class="dg-muted" x="56" y="100" font-size="11.5" fill="#64748b">agent on record: owner, active</text>
+      <text x="56" y="126" font-weight="600">Agent</text>
+      <text class="dg-muted" x="56" y="142" font-size="11.5" fill="#64748b">generates a key pair, keeps the private key</text>
+      <text x="56" y="200" font-weight="600">User → Agent</text>
+      <text class="dg-muted" x="56" y="216" font-size="11.5" fill="#64748b">pay invoice 4471</text>
+      <text x="56" y="242" font-weight="600">Agent → Authorization server</text>
+      <text class="dg-muted" x="56" y="258" font-size="11.5" fill="#64748b">token request + DPoP proof (public key)</text>
+      <text x="56" y="284" font-weight="600">Authorization server</text>
+      <text class="dg-muted" x="56" y="300" font-size="11.5" fill="#64748b">checks the agent, binds the token to its key</text>
+      <text x="56" y="326" font-weight="600">Authorization server → Agent</text>
+      <text class="dg-muted" x="56" y="342" font-size="11.5" fill="#64748b">token bound to the agent&#x27;s key (cnf.jkt)</text>
+      <text x="56" y="400" font-weight="600">Agent → Gateway (PEP)</text>
+      <text class="dg-muted" x="56" y="416" font-size="11.5" fill="#64748b">tools/call + token + a fresh proof</text>
+      <text x="56" y="442" font-weight="600">Gateway</text>
+      <text class="dg-muted" x="56" y="458" font-size="11.5" fill="#64748b">checks the proof: key, method, URL, hash, jti</text>
+      <text x="56" y="484" font-weight="600">Gateway → PDP</text>
+      <text class="dg-muted" x="56" y="500" font-size="11.5" fill="#64748b">evaluate: Alice, agent, 800 EUR</text>
+      <text x="56" y="526" font-weight="600">PDP → Gateway</text>
+      <text class="dg-muted" x="56" y="542" font-size="11.5" fill="#64748b">decision: true</text>
+      <text x="56" y="568" font-weight="600">Gateway → MCP server</text>
+      <text class="dg-muted" x="56" y="584" font-size="11.5" fill="#64748b">the call + token</text>
+      <text x="56" y="610" font-weight="600">MCP server</text>
+      <text class="dg-muted" x="56" y="626" font-size="11.5" fill="#64748b">checks audience, runs the tool</text>
+      <text x="56" y="652" font-weight="600">MCP server → Agent</text>
+      <text class="dg-muted" x="56" y="668" font-size="11.5" fill="#64748b">result, back through the gateway</text>
+      <text x="56" y="694" font-weight="600">Agent → User</text>
+      <text class="dg-muted" x="56" y="710" font-size="11.5" fill="#64748b">paid</text>
+      <text x="56" y="768" font-weight="600">Attacker → Gateway</text>
+      <text class="dg-muted" x="56" y="784" font-size="11.5" fill="#64748b">the copied token, with no valid proof</text>
+      <text x="56" y="810" font-weight="600">Gateway → Attacker</text>
+      <text class="dg-muted" x="56" y="826" font-size="11.5" fill="#64748b">refused: 401</text>
+      <text x="56" y="852" font-weight="600">PDP and MCP server</text>
+      <text class="dg-muted" x="56" y="868" font-size="11.5" fill="#64748b">not asked, not reached</text>
+    </g>
+  </g>
+</svg>

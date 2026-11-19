@@ -1,0 +1,30 @@
+{{ define "main" }}
+{{- $term := .Data.Term }}
+<div class="wrap page-head">
+  {{ partial "breadcrumbs.html" . }}
+  <h1 class="h1">#{{ $term }}</h1>
+  <p class="muted">{{ len .Pages }} post{{ if ne (len .Pages) 1 }}s{{ end }} tagged #{{ $term }}</p>
+</div>
+
+<div class="wrap stack-lg">
+  <ul class="topic-list" aria-label="All tags">
+    {{- range site.Taxonomies.tags.ByCount }}
+    <li><a href="{{ .Page.RelPermalink }}"{{ if eq .Name $term }} aria-current="page"{{ end }}>{{ .Name }}</a></li>
+    {{- end }}
+  </ul>
+
+  <section class="panel listing" aria-label="Posts tagged #{{ $term }}">
+    <ul class="post-list">
+      {{- /* Newest first; posts published the same day go by weight, highest (latest part) first. */}}
+      {{- range sort (sort .Pages "Weight" "desc") "Date" "desc" }}
+      <li>
+        <a class="row-link" href="{{ .RelPermalink }}">
+          <span class="row-link__title">{{ partial "list-title.html" . }}</span>
+          <span class="meta">{{ .ReadingTime }} min read</span>
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+  </section>
+</div>
+{{ end }}

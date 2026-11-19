@@ -1,0 +1,3 @@
+{{- /* Returns the pages of a series, in reading order (front matter "weight").
+       Usage: partial "series.html" "Series name" */ -}}
+{{- return (where site.RegularPages "Params.series" .).ByWeight -}}

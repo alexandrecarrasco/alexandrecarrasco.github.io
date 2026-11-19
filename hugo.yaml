@@ -1,0 +1,105 @@
+# Site configuration: the "ac" theme (themes/ac). The deploy workflow builds with this file.
+# Preview: hugo server
+baseURL: https://alexandrecarrasco.dev/
+locale: en-us
+title: Alexandre Carrasco
+theme: ac
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+pagination:
+  pagerSize: 20
+
+taxonomies:
+  tag: tags
+  series: series   # each series gets its own page at /series/<name>/
+
+outputs:
+  home: [html, rss, json]   # json = search index for the Posts page
+
+# Defining mounts replaces Hugo's defaults one folder type at a time, so content, static and assets are listed.
+module:
+  mounts:
+    - source: content
+      target: content
+    - source: static
+      target: static
+    - source: assets
+      target: assets
+    # LOCAL PREVIEW ONLY: the unpublished series lives outside the repo.
+    # Hugo skips these mounts when the folder does not exist (for example in CI).
+    - source: ../blog-series-local/posts
+      target: content/posts
+    - source: ../blog-series-local/svg
+      target: assets/images/posts
+
+menus:
+  main:
+    - identifier: posts
+      name: Posts
+      pageRef: /posts
+      weight: 10
+    - identifier: tags
+      name: Tags
+      pageRef: /tags
+      weight: 20
+    - identifier: glossary
+      name: Glossary
+      pageRef: /glossary
+      weight: 25
+    - identifier: about
+      name: About
+      pageRef: /about
+      weight: 30
+
+params:
+  description: "Notes on identity and access: logins, tokens, authorization, revocation, and AI agents."
+  author: Alexandre Carrasco
+  images: ["/images/og.jpg"]   # default link-preview image
+  dateFormat: "2 January 2006"
+
+  # Home page: the data page (an identity document's personal-details page) and the text under it.
+  hero:
+    fields:   # label and value pairs, printed on the data page under the name
+      - label: Field
+        value: Identity and access
+      - label: Based in
+        value: Europe
+      - label: Writing about
+        value: AI agents and the standards around them
+    mrz:      # the machine-readable lines at the foot of the data page; spaces become "<", padded to 44 characters
+      - "AC NOTES  CARRASCO  ALEXANDRE"
+      - "IDENTITY AND ACCESS  AI AGENTS  EUROPE"
+    subtitle: "I like taking identity apart to see how it works."
+    content: "Notes about identity and access: how people and machines prove who they are, what they're allowed to do, and how to take it back. Right now, the focus is AI agents. Written in plain words, based on official standards."
+    image: /images/me.webp
+    imageAlt: Portrait of Alexandre Carrasco
+
+  # The series the home page button leads to (its page is /series/<name>/).
+  featuredSeries: Securing AI Agents, Layer by Layer
+
+  social:
+    - name: GitHub
+      url: https://github.com/alexandrecarrasco
+    - name: LinkedIn
+      url: https://www.linkedin.com/in/alexandre-carrasco-6a2a229
+
+  feedback:
+    title: Spotted a mistake?
+    text: "If something here helps you, or if you think I got it wrong, I'd love to hear about it."
+    issues: https://github.com/alexandrecarrasco/alexandrecarrasco.github.io/issues/new
+
+  footerNote: Opinions are my own.
+
+  # Shown at the end of every post; a post can set its own with "writtenWith" in its front matter.
+  writtenWith: Written with Claude. The ideas and information are mine.
+
+markup:
+  highlight:
+    noClasses: false
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3

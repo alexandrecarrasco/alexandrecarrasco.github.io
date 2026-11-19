@@ -1,0 +1,110 @@
+{{ define "progress" }}
+<div class="progress" aria-hidden="true"><span class="progress__bar"></span></div>
+{{ end }}
+
+{{ define "main" }}
+{{- $page := . }}
+{{- $parts := slice }}{{ $index := -1 }}
+{{- with .Params.series }}
+  {{- $parts = partial "series.html" . }}
+  {{- range $i, $p := $parts }}{{ if eq $p $page }}{{ $index = $i }}{{ end }}{{ end }}
+{{- end }}
+
+<div class="wrap post-head">
+  {{ partial "breadcrumbs.html" . }}
+  {{- if ge $index 0 }}
+  {{- $seriesPage := partial "series-page.html" .Params.series }}
+  <p class="series-label">Part {{ add $index 1 }}{{ if gt (len $parts) 1 }} of {{ len $parts }}{{ end }} in <a href="{{ with $seriesPage }}{{ .RelPermalink }}{{ else }}{{ (index $parts 0).RelPermalink }}{{ end }}">{{ .Params.series }}</a></p>
+  {{- end }}
+  <h1 class="h1">{{ partial "short-title.html" . }}</h1>
+  <p class="meta">{{ partial "post-meta.html" . }}</p>
+  {{- partial "freshness.html" . }}
+  {{ partial "tag-links.html" . }}
+</div>
+
+{{- if ge $index 0 }}
+<nav class="wrap series-strip" aria-label="Parts of the series">
+  <ol>
+    {{- range $i, $p := $parts }}
+    <li>
+      {{- if eq $i $index }}
+      <span class="series-step series-step--current" aria-current="page">{{ partial "short-title.html" $p }}</span>
+      {{- else }}
+      <a class="series-step" href="{{ $p.RelPermalink }}">{{ partial "short-title.html" $p }}</a>
+      {{- end }}
+    </li>
+    {{- end }}
+  </ol>
+</nav>
+{{- end }}
+
+<div class="wrap post-layout">
+  {{- $toc := and (ne .Params.toc false) (gt (len .Fragments.Headings) 0) }}
+  {{- if $toc }}
+  <aside class="toc" aria-labelledby="toc-h">
+    <details class="toc__details" open>
+      <summary id="toc-h" class="toc__title">On this page</summary>
+      {{ .TableOfContents }}
+    </details>
+  </aside>
+  {{- end }}
+
+  <article class="prose post-body">
+    {{- with .Params.inShort }}
+    <aside class="in-short" aria-labelledby="in-short-h">
+      <h2 id="in-short-h" class="in-short__title">In short</h2>
+      <ul>
+        {{- range . }}
+        <li>{{ . }}</li>
+        {{- end }}
+      </ul>
+    </aside>
+    {{- end }}
+    {{ .Content }}
+
+    {{- with .Params.updates }}
+    <section class="updates" aria-labelledby="updates-h">
+      <h2 id="updates-h" class="updates__title">Updates</h2>
+      <ul>
+        {{- range . }}
+        <li><time datetime="{{ time.Format "2006-01-02" .date }}">{{ time.Format site.Params.dateFormat .date }}</time>: {{ .note }}</li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+
+    {{- /* How the post was written: site-wide text, a post can override it with "writtenWith" in its front matter. */}}
+    {{- with .Params.writtenWith | default site.Params.writtenWith }}
+    <p class="written-with">{{ . }}</p>
+    {{- end }}
+
+    {{- with site.Params.feedback }}
+    <section class="feedback" aria-labelledby="feedback-h">
+      <h2 id="feedback-h" class="feedback__title">{{ .title }}</h2>
+      <p>{{ .text }}</p>
+      <p class="link-row">
+        {{- with .issues }}
+        <a href="{{ . }}">Open an issue on GitHub</a>
+        {{- end }}
+        {{- range site.Params.social }}
+        <a href="{{ .url }}" rel="me">{{ .name }}</a>
+        {{- end }}
+      </p>
+    </section>
+    {{- end }}
+
+    {{- if ge $index 0 }}
+    {{- $prev := cond (gt $index 0) (index $parts (sub $index 1)) nil }}
+    {{- $next := cond (lt (add $index 1) (len $parts)) (index $parts (add $index 1)) nil }}
+    <nav class="prev-next" aria-label="Previous and next part">
+      {{- with $prev }}
+      <a class="prev-next__link" href="{{ .RelPermalink }}" rel="prev"><span class="prev-next__label">Previous: part {{ $index }}</span><span class="prev-next__title">{{ partial "short-title.html" . }}</span></a>
+      {{- end }}
+      {{- with $next }}
+      <a class="prev-next__link prev-next__link--next" href="{{ .RelPermalink }}" rel="next"><span class="prev-next__label">Next: part {{ add $index 2 }}</span><span class="prev-next__title">{{ partial "short-title.html" . }}</span></a>
+      {{- end }}
+    </nav>
+    {{- end }}
+  </article>
+</div>
+{{ end }}

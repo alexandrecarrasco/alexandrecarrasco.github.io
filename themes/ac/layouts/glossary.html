@@ -1,0 +1,10 @@
+{{ define "main" }}
+<div class="wrap page-head">
+  {{ partial "breadcrumbs.html" . }}
+  <h1 class="h1">{{ .Title }}</h1>
+  {{- partial "freshness.html" . }}
+</div>
+<div class="wrap">
+  <article class="prose glossary">{{ .Content }}</article>
+</div>
+{{ end }}

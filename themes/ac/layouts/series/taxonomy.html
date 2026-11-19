@@ -1,0 +1,19 @@
+{{ define "main" }}
+<div class="wrap page-head">
+  {{ partial "breadcrumbs.html" . }}
+  <h1 class="h1">Series</h1>
+  <p class="muted">Posts that build on each other, best read in order.</p>
+</div>
+<div class="wrap">
+  <ul class="entries">
+    {{- range .Pages }}
+    {{- $parts := partial "series.html" .Title }}
+    <li class="entry">
+      <a class="entry__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{- with .Description }}<p class="entry__summary">{{ . }}</p>{{ end }}
+      <p class="meta">{{ len $parts }} part{{ if ne (len $parts) 1 }}s{{ end }}</p>
+    </li>
+    {{- end }}
+  </ul>
+</div>
+{{ end }}

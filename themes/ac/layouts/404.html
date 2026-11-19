@@ -1,0 +1,11 @@
+{{ define "main" }}
+<div class="wrap page-head">
+  <p class="stamp">Not found</p>
+  <h1 class="h1">This page isn't here</h1>
+  <p class="muted">The address may be mistyped, or the page may have moved. Try the home page or the list of posts.</p>
+  <div class="button-row">
+    <a class="button button--primary" href="{{ "/" | relURL }}">Go home</a>
+    <a class="button" href="{{ "posts/" | relURL }}">All posts</a>
+  </div>
+</div>
+{{ end }}

@@ -1,0 +1,2 @@
+{{- /* Headings with a "#" link to the section, shown on hover or focus. */ -}}
+<h{{ .Level }} id="{{ .Anchor }}">{{ .Text }}{{ if ge .Level 2 }} <a class="anchor" href="#{{ .Anchor }}" aria-label="Link to this section">#</a>{{ end }}</h{{ .Level }}>

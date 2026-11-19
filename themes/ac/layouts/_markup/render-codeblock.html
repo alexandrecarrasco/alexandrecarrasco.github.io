@@ -1,0 +1,9 @@
+{{- /* Fenced code blocks: a bar with the language and a Copy button (shown when JavaScript runs). */ -}}
+{{- $result := transform.HighlightCodeBlock . }}
+<div class="code">
+  <div class="code__bar">
+    <span class="code__lang">{{ .Type | default "text" }}</span>
+    <button class="code__copy" type="button" hidden>Copy</button>
+  </div>
+  {{ $result.Wrapped }}
+</div>

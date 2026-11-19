@@ -1,0 +1,2 @@
+{{- /* Date and reading time, as one phrase. Usage: partial "post-meta.html" . */ -}}
+<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format site.Params.dateFormat }}</time>, {{ .ReadingTime }} min read

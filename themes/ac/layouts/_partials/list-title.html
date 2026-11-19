@@ -1,0 +1,10 @@
+{{- /* A post's title for lists: "Part 4: MCP Authorization in Practice" for a series post, the plain title otherwise.
+       Usage: partial "list-title.html" . */ -}}
+{{- $page := . }}
+{{- $title := .Title }}
+{{- with .Params.series }}
+  {{- range $i, $p := partial "series.html" . }}
+    {{- if eq $p $page }}{{ $title = printf "Part %d: %s" (add $i 1) (partial "short-title.html" $page) }}{{ end }}
+  {{- end }}
+{{- end }}
+{{- return $title -}}

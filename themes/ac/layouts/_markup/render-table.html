@@ -1,0 +1,58 @@
+{{- /* Markdown tables: wrapped in a box.
+       Tables with up to 3 columns wrap their text to fit the screen. Wider tables scroll sideways on mid-size
+       screens, and on phones each row is shown as a card, with each cell labelled by its column header
+       (data-label, see "Tables" in main.css). The ARIA roles keep the table semantics when the CSS turns the
+       rows into blocks.
+       In a column whose header starts with "Status", each cell gets a label taken from its own text:
+       "RFC" when it starts with RFC, "Final" when it starts with Final, "Draft" when it mentions a draft. */ -}}
+{{- $statusCol := -1 }}
+{{- $headers := slice }}
+{{- range .THead }}{{ range $i, $c := . }}
+  {{- $headers = $headers | append (plainify $c.Text | htmlUnescape) }}
+  {{- if hasPrefix (lower (plainify $c.Text)) "status" }}{{ $statusCol = $i }}{{ end }}
+{{- end }}{{ end }}
+{{- $wide := ge (len $headers) 4 }}
+<div class="table-wrap{{ if $wide }} table-wrap--stack{{ end }}">
+<table role="table">
+  <thead role="rowgroup">
+  {{- range .THead }}
+    <tr role="row">
+    {{- range . }}
+      <th scope="col" role="columnheader"
+        {{- with .Alignment }}{{ printf " style=%q" (printf "text-align: %s" .) | safeHTMLAttr }}{{ end -}}
+      >{{ .Text }}</th>
+    {{- end }}
+    </tr>
+  {{- end }}
+  </thead>
+  <tbody role="rowgroup">
+  {{- range .TBody }}
+    <tr role="row">
+    {{- range $i, $cell := . }}
+      {{- /* A cell that is only a dash (or empty) has nothing to say; the phone card layout leaves it out. */}}
+      {{- $empty := in (slice "" "-" "–" "—") (trim (plainify $cell.Text | htmlUnescape) " ") }}
+      <td role="cell"
+        {{- if $empty }} class="is-empty"{{ end }}
+        {{- with index $headers $i }} data-label="{{ . }}"{{ end }}
+        {{- with $cell.Alignment }}{{ printf " style=%q" (printf "text-align: %s" .) | safeHTMLAttr }}{{ end -}}
+      >
+      {{- $text := $cell.Text }}
+      {{- if eq $i $statusCol }}
+        {{- $t := plainify $cell.Text }}
+        {{- $badge := "" }}
+        {{- if hasPrefix $t "RFC" }}{{ $badge = "RFC" }}
+        {{- else if hasPrefix $t "Final" }}{{ $badge = "Final" }}
+        {{- else if findRE `(?i)\bdrafts?\b` $t 1 }}{{ $badge = "Draft" }}
+        {{- end }}
+        {{- with $badge }}<span class="badge badge--{{ lower . }}">{{ . }}</span> {{ end }}
+        {{- /* The "Final" label already says it: do not repeat the word in the text. */ -}}
+        {{- if eq $badge "Final" }}{{ $text = replaceRE `^\s*Final[,:]?\s*` "" (string $cell.Text) | safeHTML }}{{ end }}
+      {{- end }}
+      {{- $text -}}
+      </td>
+    {{- end }}
+    </tr>
+  {{- end }}
+  </tbody>
+</table>
+</div>

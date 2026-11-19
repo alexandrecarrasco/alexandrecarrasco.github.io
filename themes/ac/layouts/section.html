@@ -1,0 +1,75 @@
+{{ define "main" }}
+<div class="wrap page-head page-head--split">
+  <div class="stack-sm">
+    {{ partial "breadcrumbs.html" . }}
+    <h1 class="h1">Posts</h1>
+    {{- $series := slice }}{{ range .RegularPages }}{{ with .Params.series }}{{ $series = $series | append . }}{{ end }}{{ end }}
+    {{- $series = $series | uniq }}
+    <p class="muted">{{ len .RegularPages }} post{{ if ne (len .RegularPages) 1 }}s{{ end }}{{ with $series }}, {{ len . }} series{{ end }}</p>
+  </div>
+  <div class="search" id="search" hidden>
+    <label for="search-input">Search posts</label>
+    <div class="search__box">
+      {{ partial "icon.html" "search" }}
+      <input id="search-input" type="search" placeholder="Title, tag or RFC number" autocomplete="off" data-index="{{ "index.json" | relURL }}">
+    </div>
+  </div>
+</div>
+
+<div class="wrap stack-lg">
+  <section class="panel search-results" aria-live="polite" hidden>
+    <h2 class="panel__title search-results__title"></h2>
+    <ul class="post-list search-results__list"></ul>
+  </section>
+
+  {{- $all := .RegularPages }}
+  {{- $series := slice }}{{ range $all }}{{ with .Params.series }}{{ $series = $series | append . }}{{ end }}{{ end }}
+  {{- range $series | uniq }}
+  {{- $name := . }}
+  {{- $parts := partial "series.html" $name }}
+  {{- $minutes := 0 }}{{ range $parts }}{{ $minutes = add $minutes .ReadingTime }}{{ end }}
+  <section class="panel listing" aria-label="Series: {{ $name }}">
+    <div class="panel__head panel__head--rule">
+      <h2 class="h2">{{ with partial "series-page.html" $name }}<a href="{{ .RelPermalink }}">{{ $name }}</a>{{ else }}{{ $name }}{{ end }}</h2>
+      <p class="meta">A series in {{ len $parts }} part{{ if ne (len $parts) 1 }}s{{ end }}, best read in order. About {{ $minutes }} minutes in all.</p>
+    </div>
+    <ol class="post-list">
+      {{- range $i, $p := $parts }}
+      <li class="post-item">
+        <span class="post-item__num" aria-hidden="true">{{ add $i 1 }}</span>
+        <div class="post-item__body">
+          <a class="post-item__title" href="{{ $p.RelPermalink }}">{{ partial "short-title.html" $p }}</a>
+          <p class="post-item__summary">{{ $p.Summary | plainify }}</p>
+          <p class="meta">{{ partial "post-meta.html" $p }}</p>
+          {{ partial "tag-links.html" $p }}
+        </div>
+      </li>
+      {{- end }}
+    </ol>
+  </section>
+  {{- end }}
+
+  {{- $loose := where $all "Params.series" "==" nil }}
+  {{- with $loose }}
+  <section class="panel listing" aria-labelledby="notes-h">
+    <div class="panel__head panel__head--rule"><h2 id="notes-h" class="h2">Other posts</h2></div>
+    <ul class="post-list">
+      {{- range .ByDate.Reverse }}
+      <li class="post-item">
+        <div class="post-item__body">
+          <a class="post-item__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+          <p class="post-item__summary">{{ .Summary | plainify }}</p>
+          <p class="meta">{{ partial "post-meta.html" . }}</p>
+          {{ partial "tag-links.html" . }}
+        </div>
+      </li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  {{- if not $all }}
+  <p class="muted">No posts yet.</p>
+  {{- end }}
+</div>
+{{ end }}

@@ -1,0 +1,52 @@
+{{ define "main" }}
+{{- $parts := partial "series.html" .Title }}
+{{- $minutes := 0 }}{{ range $parts }}{{ $minutes = add $minutes .ReadingTime }}{{ end }}
+{{- /* The oldest "last checked" date among the parts: the whole series is at least that fresh. */}}
+{{- $checked := "" }}
+{{- range $parts }}{{ with .Params.lastChecked }}{{ $d := time.Format "2006-01-02" . }}{{ if or (eq $checked "") (lt $d $checked) }}{{ $checked = $d }}{{ end }}{{ end }}{{ end }}
+<div class="wrap page-head">
+  {{ partial "breadcrumbs.html" . }}
+  <p class="series-label">A series in {{ len $parts }} part{{ if ne (len $parts) 1 }}s{{ end }}</p>
+  <h1 class="h1">{{ .Title }}</h1>
+  <p class="meta">About {{ $minutes }} minutes of reading in all{{ with $checked }}. Facts last checked {{ time.Format site.Params.dateFormat . }}{{ end }}.</p>
+  {{- with index $parts 0 }}
+  <div class="button-row"><a class="button button--primary" href="{{ .RelPermalink }}">Start with part 1</a></div>
+  {{- end }}
+</div>
+
+<div class="wrap series-page">
+  <div class="prose series-page__intro">{{ .Content }}</div>
+
+  <section aria-labelledby="parts-h">
+    <h2 id="parts-h" class="h2">The parts</h2>
+    <ol class="series-parts">
+      {{- range $p := $parts }}
+      <li class="series-part">
+        <h3 class="series-part__title"><a href="{{ $p.RelPermalink }}">{{ partial "short-title.html" $p }}</a></h3>
+        <p class="meta">{{ partial "post-meta.html" $p }}</p>
+        {{- with $p.Params.inShort }}
+        <ul class="series-part__points">
+          {{- range . }}
+          <li>{{ . }}</li>
+          {{- end }}
+        </ul>
+        {{- else }}
+        <p>{{ $p.Summary | plainify }}</p>
+        {{- end }}
+      </li>
+      {{- end }}
+    </ol>
+  </section>
+
+  {{- with .Params.upcoming }}
+  <section aria-labelledby="next-h">
+    <h2 id="next-h" class="h2">Coming next</h2>
+    <ul class="series-upcoming">
+      {{- range . }}
+      <li>{{ . }}</li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+</div>
+{{ end }}

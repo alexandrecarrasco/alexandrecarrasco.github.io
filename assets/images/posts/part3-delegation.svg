@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 978" role="img" color="#1e293b" aria-label="The whole flow, with the hop after the MCP server. Before any request: 0, the agent is on record in the agent registry, with an owner and the status active. Getting a token: 1, Alice asks the agent to pay invoice 4471; 2, the agent asks the authorization server for a token, naming the MCP server as the resource; 3, the authorization server checks its own record of the agent: known and enabled; 4, it returns an access token whose audience is the MCP server. Calling the tool: 5, the agent sends tools/call transfer_funds with Alice&#x27;s token to the gateway, the PEP; 6, the gateway asks the PDP to evaluate the call; 7, the PDP answers decision true; 8, the gateway forwards the call and token to the MCP server; 9, the MCP server checks that the token was issued for it. The new hop, delegation: 9a, the MCP server sends a token exchange request to the authorization server, with Alice&#x27;s token as the subject token and its own credential as the actor token; 9b, the authorization server checks that Alice&#x27;s token is valid and that this server may act for her at the payments API; 9c, it returns a new token whose audience is the payments API, whose subject is Alice, and whose act claim names the MCP server, with the agent as a prior actor; 9d, the MCP server calls the payments API with the new token, and the payments API checks the audience and applies Alice&#x27;s limits; 9e, the payments API returns the result. Back to Alice: 10, the result goes back to the agent through the gateway; 11, the agent tells Alice the invoice is paid.">
+  <defs>
+    <marker id="p3d-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="dg-line-fill" d="M0 0L10 5L0 10z" fill="#64748b"/></marker>
+    <marker id="p3d-m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="dg-l1-fill" d="M0 0L10 5L0 10z" fill="#1d4ed8"/></marker>
+  </defs>
+  <rect class="dg-card" x="1" y="1" width="758" height="976" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+  <g font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="currentColor">
+    <text x="24" y="32" font-size="15" font-weight="600">The whole flow, with delegation</text>
+    <!-- phases -->
+    <rect class="dg-note" x="16" y="118" width="728" height="86" rx="8" fill="#f1f5f9" stroke="none"/>
+    <text class="dg-muted" x="24" y="135" font-size="11.5" font-weight="600" fill="#64748b">Before any request</text>
+    <rect class="dg-note" x="16" y="210" width="728" height="176" rx="8" fill="#f1f5f9" stroke="none"/>
+    <text class="dg-muted" x="24" y="227" font-size="11.5" font-weight="600" fill="#64748b">Getting a token</text>
+    <rect class="dg-note" x="16" y="392" width="728" height="206" rx="8" fill="#f1f5f9" stroke="none"/>
+    <text class="dg-muted" x="24" y="409" font-size="11.5" font-weight="600" fill="#64748b">Calling the tool</text>
+    <rect class="dg-note" x="16" y="604" width="728" height="262" rx="8" fill="#f1f5f9" stroke="none"/>
+    <text class="dg-muted" x="24" y="621" font-size="11.5" font-weight="600" fill="#64748b">The new hop: delegation</text>
+    <rect class="dg-note" x="16" y="872" width="728" height="90" rx="8" fill="#f1f5f9" stroke="none"/>
+    <text class="dg-muted" x="24" y="889" font-size="11.5" font-weight="600" fill="#64748b">Back to Alice</text>
+    <!-- lifelines -->
+    <g class="dg-rule" stroke="#e2e8f0" stroke-width="1.25" stroke-dasharray="4 4">
+      <line x1="65" x2="65" y1="108" y2="962"/>
+      <line x1="155" x2="155" y1="108" y2="962"/>
+      <line x1="245" x2="245" y1="108" y2="962"/>
+      <line x1="335" x2="335" y1="108" y2="962"/>
+      <line x1="425" x2="425" y1="108" y2="962"/>
+      <line x1="515" x2="515" y1="108" y2="962"/>
+      <line x1="605" x2="605" y1="108" y2="962"/>
+      <line x1="695" x2="695" y1="108" y2="962"/>
+    </g>
+    <!-- steps done by one party on its own -->
+    <rect class="dg-card" x="286.65" y="148" width="96.7" height="44" rx="6" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="335" y="167" text-anchor="middle" font-size="11.5">0 on record:</text>
+    <text x="335" y="182" text-anchor="middle" font-size="11.5">owner, active</text>
+    <rect class="dg-card" x="190.75" y="300" width="108.5" height="44" rx="6" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="245" y="319" text-anchor="middle" font-size="11.5">3 checks: agent</text>
+    <text x="245" y="334" text-anchor="middle" font-size="11.5">known, enabled</text>
+    <rect class="dg-card" x="571.4" y="542" width="67.2" height="44" rx="6" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="605" y="561" text-anchor="middle" font-size="11.5">9 checks</text>
+    <text x="605" y="576" text-anchor="middle" font-size="11.5">audience</text>
+    <rect class="dg-focus" x="164.2" y="664" width="161.6" height="44" rx="6" fill="#eff6ff" stroke="#1d4ed8"/>
+    <text x="245" y="683" text-anchor="middle" font-size="11.5">9b checks: token valid,</text>
+    <text x="245" y="698" text-anchor="middle" font-size="11.5">server may act for Alice</text>
+    <rect class="dg-focus" x="588.2" y="780" width="149.8" height="44" rx="6" fill="#eff6ff" stroke="#1d4ed8"/>
+    <text x="663.1" y="799" text-anchor="middle" font-size="11.5">checks audience,</text>
+    <text x="663.1" y="814" text-anchor="middle" font-size="11.5">applies Alice&#x27;s limits</text>
+    <!-- parties -->
+    <g font-weight="600" font-size="12" text-anchor="middle">
+      <rect class="dg-box" x="22" y="50" width="86" height="58" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.25"/>
+      <text x="65" y="83.5">User</text>
+      <rect class="dg-box" x="112" y="50" width="86" height="58" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.25"/>
+      <text x="155" y="76">Agent</text>
+      <text class="dg-muted" x="155" y="91" font-weight="400" font-size="10.5" fill="#64748b">MCP client</text>
+      <rect class="dg-box" x="202" y="50" width="86" height="58" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.25"/>
+      <text x="245" y="68.5">Authorization</text>
+      <text x="245" y="83.5">server</text>
+      <text class="dg-muted" x="245" y="98.5" font-weight="400" font-size="10.5" fill="#64748b">also the STS</text>
+      <rect class="dg-box" x="292" y="50" width="86" height="58" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.25"/>
+      <text x="335" y="76">Agent</text>
+      <text x="335" y="91">registry</text>
+      <rect class="dg-box" x="382" y="50" width="86" height="58" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.25"/>
+      <text x="425" y="76">Gateway</text>
+      <text class="dg-muted" x="425" y="91" font-weight="400" font-size="10.5" fill="#64748b">PEP</text>
+      <rect class="dg-box" x="472" y="50" width="86" height="58" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.25"/>
+      <text x="515" y="83.5">PDP</text>
+      <rect class="dg-box" x="562" y="50" width="86" height="58" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.25"/>
+      <text x="605" y="83.5">MCP server</text>
+      <rect class="dg-focus" x="652" y="50" width="86" height="58" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+      <text x="695" y="76">Payments</text>
+      <text x="695" y="91">API</text>
+    </g>
+    <!-- the flow from the first post -->
+    <g class="dg-line" fill="none" stroke="#64748b" stroke-width="1.25" marker-end="url(#p3d-m0)">
+      <path d="M65 250H155"/>
+      <path d="M155 280H245"/>
+      <path d="M245 366H155"/>
+      <path d="M155 432H425"/>
+      <path d="M425 462H515"/>
+      <path d="M515 492H425"/>
+      <path d="M425 522H605"/>
+      <path d="M605 912H155"/>
+      <path d="M155 942H65"/>
+    </g>
+    <!-- what this post adds -->
+    <g class="dg-l1" fill="none" stroke="#1d4ed8" stroke-width="1.75" marker-end="url(#p3d-m1)">
+      <path d="M605 644H245"/>
+      <path d="M245 730H605"/>
+      <path d="M605 760H695"/>
+      <path d="M695 846H605"/>
+    </g>
+    <g font-size="11.5" text-anchor="middle">
+      <text x="110" y="244">1 pay invoice</text>
+      <text x="200" y="274">2 token request</text>
+      <text x="200" y="360">4 token, audience = MCP server</text>
+      <text x="290" y="426">5 tools/call transfer_funds + token</text>
+      <text x="470" y="456">6 evaluate</text>
+      <text x="470" y="486">7 decision: true</text>
+      <text x="515" y="516">8 call + token</text>
+      <text x="425" y="638">9a token exchange: Alice&#x27;s token + its own</text>
+      <text x="425" y="724">9c new token: audience = payments API, with act</text>
+      <text x="650" y="754">9d transfer + new token</text>
+      <text x="650" y="840">9e result</text>
+      <text x="380" y="906">10 result (back through the gateway)</text>
+      <text x="110" y="936">11 paid</text>
+    </g>
+  </g>
+</svg>

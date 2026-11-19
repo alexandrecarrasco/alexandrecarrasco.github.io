@@ -1,0 +1,37 @@
+{{ define "main" }}
+{{- $hero := site.Params.hero }}
+<div class="wrap about">
+  <aside class="about__side">
+    {{- with $hero.image }}
+    <img class="portrait" src="{{ . | relURL }}" alt="{{ $hero.imageAlt }}" width="200" height="240">
+    {{- end }}
+    <div>
+      <p class="about__name">{{ site.Params.author }}</p>
+    </div>
+    <ul class="ext-links">
+      {{- range site.Params.social }}
+      <li><a href="{{ .url }}" rel="me">{{ .name }}</a></li>
+      {{- end }}
+      <li><a href="{{ "index.xml" | relURL }}">RSS feed</a></li>
+    </ul>
+  </aside>
+
+  <article class="about__main">
+    {{ partial "breadcrumbs.html" . }}
+    <h1 class="h1">{{ .Title }}</h1>
+    {{- with .Params.lead }}<p class="lead">{{ . }}</p>{{ end }}
+    <div class="prose">{{ .Content }}</div>
+
+    {{- with .Params.skills }}
+    <section class="stack-md about__skills" aria-labelledby="skills-h">
+      <h2 id="skills-h" class="h2">{{ $.Params.skillsTitle }}</h2>
+      <ul class="skill-grid">
+        {{- range . }}
+        <li>{{ . }}</li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+  </article>
+</div>
+{{ end }}
